@@ -108,9 +108,9 @@ void test_heapsort() {
         
         MinQueue<int> heap(int_data, 10);
         heap.sort(int_data); // result is that int_data is sorted in descending order
-        string sorted_str = to_string(int_data[9]);
+        string sorted_str = to_string(int_data[0]);
         for(int i = 1; i < 10; i++) {
-            sorted_str += (" " + to_string(int_data[9-i]));
+            sorted_str += (" " + to_string(int_data[i]));
         }
         if(sorted_str != "1 2 3 4 5 6 7 8 9 10") {
             cout << "Incorrect heapsort result. Expected 1 2 3 4 5 6 7 8 9 10 but got : " << sorted_str << endl;
@@ -144,10 +144,10 @@ void test_heapsort() {
 int main() {
     
     test_insert();
-    // test_min();
-    // test_extract_min();
-    // test_decrease_key();
-    // test_heapsort();
+    test_min();
+    test_extract_min();
+    test_decrease_key();
+    test_heapsort();
     // test_sliding_window();
     
     cout << "Testing completed" << endl;

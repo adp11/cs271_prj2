@@ -11,7 +11,7 @@ template <typename T>
 int MinQueue<T>::parent(int i)
 /*
 Pre-conditions: i must be of type int
-Post-conditions: must be of type int
+Post-conditions: return value must be of type int
 */
 {
 	return (i - 1) / 2;
@@ -21,7 +21,7 @@ template <typename T>
 int MinQueue<T>::left(int i)
 /*
 Pre-conditions: i must be of type int
-Post-conditions: must be of type int
+Post-conditions: return value must be of type int
 */
 {
 	return (2 * i + 1);
@@ -31,7 +31,7 @@ template <typename T>
 int MinQueue<T>::right(int i)
 /*
 Pre-conditions: i must be of type int
-Post-conditions: must be of type int
+Post-conditions: return value must be of type int
 */
 {
 	return (2 * i + 2);
@@ -49,7 +49,8 @@ Post-conditions: i is at root of the heap
 
 	int smallest = i;
 
-	if (l < heapSize && Q[l] < Q[i])
+	// picks the smaller child (if any) and assign it to 'smallest' in line 52-61 
+	if (l < heapSize && Q[l] < Q[i]) 
 	{
 		smallest = l;
 	}
@@ -61,11 +62,8 @@ Post-conditions: i is at root of the heap
 
 	if (smallest != i)
 	{
-
-		T temp = Q[smallest];
-		Q[smallest] = Q[i];
-		Q[i] = temp;
-		heapify_down(smallest);
+		swap(Q[smallest], Q[i]); // swap current node with smaller child
+		heapify_down(smallest); // heapify again 
 	}
 }
 
@@ -97,11 +95,10 @@ Post-conditions: elements from [i...Q.length-1 is sorted]
 		heapSize -= 1;
 		heapify_down(0);
 	}
-
 }
 
 // -------------------MinQueue operations---------------------------
-template <typename T> // constructor
+template <typename T>
 MinQueue<T>::MinQueue()
 {
 	heapSize = 0;
@@ -114,82 +111,19 @@ Pre-conditions: n must be of type int, A must be pointer to array of type T
 Post-conditions: a min-priority queue created from T* A
 */
 {
-	for (int i = 0; i < n; i++) {
-		Q.push_back(A[i]);
+	Q.resize(n); // allocate space in advance
+	for (int i = 0; i < n; i++) { // copy elements in A to this->Q
+		Q[i] = A[i];
 	}
 	heapSize = n;
-	build_min_heap();
-}
-
-template <typename T>
-T MinQueue<T>::min()
-/*
-Pre-conditions: none
-Post-conditions: read min value of type T, Q is still intact
-*/
-{
-	if (Q.size() > 0)
-	{
-		return Q[0];
-	}
-}
-
-template <typename T>
-T MinQueue<T>::extract_min()
-/*
-Pre-conditions: none
-Post-conditions: remove and return min value of type T, and Q is 1 less smaller in size
-*/
-{
-	if (Q.size() > 0)
-	{
-		T min = Q[0];
-		Q[0] = Q[heapSize - 1];
-		Q.pop_back();
-		heapSize -= 1;
-		heapify_down(0);
-		return min;
-	}
-}
-
-template <typename T>
-void MinQueue<T>::decrease_key(int i, T key)
-/*
-Pre-conditions: index must be of type int and key must be of type T
-Post-conditions: new key is at a place where heap property is still kept
-*/
-{
-	if (Q.size() != 0) { // test case of empty Q
-		Q[i] = key;
-			while (Q[i] < Q[parent(i)])
-			{
-				int parentIndex = parent(i);
-				T temp = Q[i];
-				Q[i] = Q[parent(i)];
-				Q[parent(i)] = temp;
-				i = parentIndex;
-			}
-	}
-	
-}
-
-template <typename T>
-void MinQueue<T>::insert(T key)
-/*
-Pre-conditions: key must be of type T
-Post-conditions: new key is at a place where heap property is still kept and queue is 1 more bigger in size
-*/
-{
-	Q.push_back(key);
-	decrease_key(heapSize, key);
-	heapSize += 1;
+	build_min_heap(); // apply build() to this->Q
 }
 
 template <typename T>
 string MinQueue<T>::to_string()
 /*
 Pre-conditions: none
-Post-conditions: a string representation of the queue Q
+Post-conditions: a string representation of the min queue Q
 */
 {
 	stringstream ss;
@@ -214,4 +148,64 @@ Pre-conditions: none
 Post-conditions: return the size of queue Q
 */
 	return Q.size();
+}
+
+template <typename T>
+T MinQueue<T>::min()
+/*
+Pre-conditions: none
+Post-conditions: read min value of type T, Q is still intact
+*/
+{
+	if (Q.size() > 0)
+	{
+		return Q[0];
+	}
+}
+
+template <typename T>
+T MinQueue<T>::extract_min()
+/*
+Pre-conditions: none
+Post-conditions: remove and return min value of type T, and Q is 1 less smaller in size
+*/
+{
+	if (Q.size() > 0)
+	{
+		swap(Q[0], Q[heapSize-1]);
+		T min = Q.back(); // get the min
+		Q.pop_back(); // remove the min
+		heapSize -= 1; // decrease heapSize
+		heapify_down(0); // fix the problematic element at root
+		return min;
+	}
+}
+
+template <typename T>
+void MinQueue<T>::decrease_key(int i, T key)
+/*
+Pre-conditions: i must be of type int and key must be of type T
+Post-conditions: new key is at a place where heap property is still kept
+*/
+{
+	if (i < Q.size()) { // prevent out-of-range error
+		Q[i] = key;
+		while (Q[i] < Q[parent(i)]) // keep swapping this problematic node at i upwards until heap property is restored
+		{
+			swap(Q[i], Q[parent(i)]);
+			i = parent(i);
+		}
+	}
+}
+
+template <typename T>
+void MinQueue<T>::insert(T key)
+/*
+Pre-conditions: key must be of type T
+Post-conditions: new key is at a place where heap property holds true and queue is 1 more bigger in size
+*/
+{
+	Q.push_back(key); // add key to the end of Q
+	heapSize += 1; // increase size
+	decrease_key(heapSize-1, key); // apply decrease_key() to this key
 }

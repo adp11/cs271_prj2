@@ -8,29 +8,29 @@
 using namespace std;
 
 template <typename T>
-class MinQueue {
+struct MinQueue {
 public:
-  MinQueue();  
-  MinQueue(T* A, int n);
+  MinQueue();// DONE
+  MinQueue(T* A, int n);// DONE
 
-  void insert(T key);
-  T min();
-  T extract_min();
-  string to_string();
+  void insert(T key);// DONE
+  T min();// DONE
+  T extract_min();// DONE
+  string to_string();// DONE
   void sort(T *A);
-  void decrease_key(int i, T key); // same as heapify_up
-  int size();
+  void decrease_key(int i, T key);// DONE
+  int size();// DONE
 
 private:
   
   vector<T> Q;
   int heapSize;
 
-  int parent(int i);
-  int left(int i);
-  int right(int i);
-  void heapify_down(int i);
-  void build_min_heap();
+  int parent(int i);// DONE
+  int left(int i);// DONE
+  int right(int i);// DONE
+  void heapify_down(int i);// DONE
+  void build_min_heap();// DONE
   
 };
 
