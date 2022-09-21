@@ -10,14 +10,16 @@ using namespace std;
 template <typename T>
 class MinQueue {
 public:
-  MinQueue();  // empty constructor initializing an empty minimum priority queue (min heap)
-  MinQueue(T* A, int n); // create a minimum priority queue (min heap) of the n elements in A
+  MinQueue();  
+  MinQueue(T* A, int n);
 
   void insert(T key);
   T min();
   T extract_min();
-  void percolate_up(int i);
   string to_string();
+  void sort(T *A);
+  void decrease_key(int i, T key); // same as heapify_up
+  int size();
 
 private:
   
@@ -27,10 +29,9 @@ private:
   int parent(int i);
   int left(int i);
   int right(int i);
-  void heapify(int i);
+  void heapify_down(int i);
   void build_min_heap();
-  void heapsort();
-  // void deallocate(); // private method for destructor
+  
 };
 
 #endif
