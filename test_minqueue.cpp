@@ -6,12 +6,15 @@ using namespace std;
 
 void test_insert() {
     try {
-        MinQueue<int> empty;
-        empty.insert(0);
+        // FOR CHAR TYPE
+        MinQueue<char> empty;
+        empty.insert('a');
         string mq_str = empty.to_string();
-        if(mq_str != "0") {
-            cout << "Incorrect insert result. Epected 0 but got : " << mq_str << endl;
+        if(mq_str != "a") {
+            cout << "Incorrect insert result. Epected a but got : " << mq_str << endl;
         }
+
+        // FOR INT TYPE
         int* int_data = new int[10];
         for(int i = 0; i < 10; i++) {
             int_data[i] = 10-i;
@@ -22,6 +25,21 @@ void test_insert() {
         mq_str = mq.to_string();
         if(mq_str != "0 2 1 3 6 4 8 10 7 9 25 5") {
             cout << "Incorrect insert result. Expected 0 2 1 3 6 4 8 10 7 9 25 5 but got : " << mq_str << endl;
+        }
+
+        // FOR STRING TYPE
+        string* string_data = new string[4];
+        string_data[0] = "EEE";
+        string_data[1] = "DDD";
+        string_data[2] = "FFF";
+        string_data[3] = "BBB";
+        
+        MinQueue<string> string_mq(string_data, 4);
+        string_mq.insert("ZZZ");
+        string_mq.insert("AAA");
+        string result = string_mq.to_string();
+        if(result != "AAA DDD BBB EEE ZZZ FFF") {
+            cout << "Incorrect insert result. Expected AAA DDD BBB EEE ZZZ FFF but got : " << result << endl;
         }
     } catch (exception& e) {
         cerr << "Error inserting into the priority queue : " << e.what() << endl;
@@ -35,6 +53,7 @@ void test_min() {
         if(min != 0) {
             cout << "Incorrect min result. Expect 0 but got : " << min << endl;
         }
+
         int* int_data = new int[10];
         for(int i = 0; i < 10; i++){
             int_data[i] = 10-i;
@@ -98,16 +117,18 @@ void test_decrease_key() {
 
 void test_heapsort() {
     try {
+        // FOR INT TYPE
         MinQueue<int> empty;
         int* empty_data = new int[0];
         empty.sort(empty_data);
+        
         int* int_data = new int[10];
         for(int i = 0; i < 10; i++){
             int_data[i] = 10-i;
         }
         
         MinQueue<int> heap(int_data, 10);
-        heap.sort(int_data); // result is that int_data is sorted in descending order
+        heap.sort(int_data);
         string sorted_str = to_string(int_data[0]);
         for(int i = 1; i < 10; i++) {
             sorted_str += (" " + to_string(int_data[i]));
@@ -115,31 +136,28 @@ void test_heapsort() {
         if(sorted_str != "1 2 3 4 5 6 7 8 9 10") {
             cout << "Incorrect heapsort result. Expected 1 2 3 4 5 6 7 8 9 10 but got : " << sorted_str << endl;
         }
+
+        // FOR STRING TYPE
+        string* string_data = new string[4];
+        string_data[0] = "EEE";
+        string_data[1] = "DDD";
+        string_data[2] = "FFF";
+        string_data[3] = "BBB";
+        
+        MinQueue<string> string_mq(string_data, 4);
+        string_mq.sort(string_data);
+        string sorted = string_data[0];
+        for(int i = 1; i < 4; i++) {
+            sorted += (" " + string_data[i]);
+        }
+        if(sorted != "BBB DDD EEE FFF") {
+            cout << "Incorrect heapsort result. Expected BBB DDD EEE FFF but got : " << sorted << endl;
+        }
+
     } catch (exception& e) {
         cerr << "Error in sorting : " << e.what() << endl;
     }
 }
-
-// void test_sliding_window() {
-//     try {
-//         int* empty = new int[0];
-//         string window_result = sliding_window(empty, 0, 0);
-//         if(window_result != "") {
-//             cout << "Incorrect sliding window result. Expected and empty string but got : " << window_result << endl;
-//         }
-//         int nums[8] = {1,3,-1,-3,5,3,6,7};
-//         window_result = sliding_window(nums, 8, 3);
-//         if(window_result != "-1 -3 -3 -3 3 3") {
-//             cout << "Incorrect sliding window result. Expected -1 -3 -3 -3 3 3 but got : " << window_result << endl;
-//         }
-//         window_result = sliding_window(nums, 1, 1);
-//         if(window_result != "1") {
-//             cout << "Incorrect sliding window result. Expected 1 but got : " << window_result << endl;
-//         }
-//     } catch(exception &e) {
-//         cerr << "Error in generating sliding window result : " << e.what() << endl;
-//     }
-// }
 
 int main() {
     
@@ -147,6 +165,7 @@ int main() {
     test_min();
     test_extract_min();
     test_decrease_key();
+    
     test_heapsort();
     // test_sliding_window();
     

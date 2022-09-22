@@ -49,7 +49,7 @@ Post-conditions: i is at root of the heap
 
 	int smallest = i;
 
-	// picks the smaller child (if any) and assign it to 'smallest' in line 52-61 
+	// pick the smaller child (if any) and assign it to 'smallest' in line 52-61 
 	if (l < heapSize && Q[l] < Q[i]) 
 	{
 		smallest = l;
@@ -74,7 +74,7 @@ Pre-conditions: Q might or might not be a min-queue priority
 Post-conditions: Q is a min-queue priority
 */
 {
-	for (int i = Q.size() / 2; i >= 0; i--)
+	for (int i = (Q.size()/2-1); i >= 0; i--)
 	{
 		heapify_down(i);
 	}
@@ -87,13 +87,13 @@ Pre-conditions: elements from [i+1 ... Q.length-1] is sorted
 Post-conditions: elements from [i...Q.length-1 is sorted]
 */
 {
-	for (int i = Q.size(); i > 0; i--)
+	for (int i = (Q.size()-1); i >= 0; i--)
 	{
-		T temp = Q[i];
-		Q[i] = Q[0];
-		Q[0] = temp;
-		heapSize -= 1;
-		heapify_down(0);
+		swap(Q[i], Q[0]); // swap last node with root node
+		heapSize -= 1; // exclude last node from heap
+		heapify_down(0); // fix problematic node at root
+
+		A[Q.size()-1-i] = Q[i]; // put next smallest value to A (from left to right)
 	}
 }
 
