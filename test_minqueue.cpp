@@ -165,9 +165,7 @@ int main() {
     test_min();
     test_extract_min();
     test_decrease_key();
-    
     test_heapsort();
-    // test_sliding_window();
     
     cout << "Testing completed" << endl;
     
