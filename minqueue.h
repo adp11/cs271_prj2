@@ -9,7 +9,8 @@ using namespace std;
 
 template <typename T>
 struct MinQueue {
-public:
+
+public: // public methods that will be used externally
   MinQueue();
   MinQueue(T* A, int n);
 
@@ -21,8 +22,7 @@ public:
   void decrease_key(int i, T key);
   int size();
 
-private:
-  
+private: // properties and methods that are for internal use only
   vector<T> Q;
   int heapSize;
 
@@ -31,7 +31,6 @@ private:
   int right(int i);
   void heapify_down(int i);
   void build_min_heap();
-  
 };
 
 #endif

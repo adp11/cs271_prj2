@@ -1,5 +1,11 @@
 # minor changes based on the template provided from Bootcamp C++ pdf
-all: test
+all: test usecase
+
+usecase: main.o minqueue.o
+	g++ -std=c++11 minqueue.o main.o -o usecase
+
+main.o: main.cpp
+	g++ -std=c++11 -c main.cpp
 
 test: minqueue.o test_minqueue.o
 	g++ -std=c++11 minqueue.o test_minqueue.o -o test

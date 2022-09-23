@@ -70,6 +70,7 @@ void test_min() {
 
 void test_extract_min() {
     try {
+        // FOR INT TYPE
         MinQueue<int> empty;
         int min = empty.extract_min();
         string mq_str = empty.to_string();
@@ -86,6 +87,22 @@ void test_extract_min() {
         if(min != 1 || mq_str != "2 3 4 7 6 5 8 10 9") {
             cout << "Incorrect extract min result. Expected 1 and the queue 2 3 4 7 6 5 8 10 9 but got : " << min << " and a queue of : " << mq_str << endl;
         }
+
+        // FOR STRING TYPE
+        string* string_data = new string[4];
+        string_data[0] = "ZZZ";
+        string_data[1] = "YYY";
+        string_data[2] = "XXX";
+        string_data[3] = "GGG";
+        
+        MinQueue<string> string_mq(string_data, 4);
+        string min_value = string_mq.extract_min();
+        mq_str = string_mq.to_string();
+        if(min_value != "GGG" || mq_str != "XXX YYY ZZZ") {
+            cout << "Incorrect extract min result. Expected GGG and the queue XXX YYY ZZZ but got : " << min_value << " and a queue of : " << mq_str << endl;
+        }
+
+
     } catch (exception& e) {
         cerr << "Error in determining min of the priority queue : " << e.what() << endl;
     }

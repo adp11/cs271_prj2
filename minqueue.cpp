@@ -10,7 +10,7 @@ using namespace std;
 template <typename T>
 int MinQueue<T>::parent(int i)
 /*
-Pre-conditions: i must be of type int
+Pre-conditions: param i must be of type int
 Post-conditions: return value must be of type int
 */
 {
@@ -20,7 +20,7 @@ Post-conditions: return value must be of type int
 template <typename T>
 int MinQueue<T>::left(int i)
 /*
-Pre-conditions: i must be of type int
+Pre-conditions: param i must be of type int
 Post-conditions: return value must be of type int
 */
 {
@@ -30,7 +30,7 @@ Post-conditions: return value must be of type int
 template <typename T>
 int MinQueue<T>::right(int i)
 /*
-Pre-conditions: i must be of type int
+Pre-conditions: param i must be of type int
 Post-conditions: return value must be of type int
 */
 {
@@ -49,7 +49,7 @@ Post-conditions: i is at root of the heap
 
 	int smallest = i;
 
-	// pick the smaller child (if any) and assign it to 'smallest' in line 52-61 
+	// line 52-61 means that pick the smaller child (if any) and assign it to 'smallest'
 	if (l < heapSize && Q[l] < Q[i]) 
 	{
 		smallest = l;
@@ -74,7 +74,7 @@ Pre-conditions: Q might or might not be a min-queue priority
 Post-conditions: Q is a min-queue priority
 */
 {
-	for (int i = (Q.size()/2-1); i >= 0; i--)
+	for (int i = (Q.size()/2-1); i >= 0; i--) // start doing the heapify_down() at the first non-leaf node (at (size/2) -1)
 	{
 		heapify_down(i);
 	}
@@ -83,8 +83,8 @@ Post-conditions: Q is a min-queue priority
 template <typename T>
 void MinQueue<T>::sort(T *A)
 /*
-Pre-conditions: elements from [i+1 ... Q.length-1] is sorted
-Post-conditions: elements from [i...Q.length-1 is sorted]
+Pre-conditions: at the start of each iteration i, elements from [i+1 ... Q.length-1] is sorted
+Post-conditions: elements from [i...Q.length-1] is sorted
 */
 {
 	for (int i = (Q.size()-1); i >= 0; i--)
@@ -107,11 +107,11 @@ MinQueue<T>::MinQueue()
 template <typename T>
 MinQueue<T>::MinQueue(T *A, int n)
 /*
-Pre-conditions: n must be of type int, A must be pointer to array of type T
+Pre-conditions: param n must be of type int, param A must be pointer to array of type T
 Post-conditions: a min-priority queue created from T* A
 */
 {
-	Q.resize(n); // allocate space in advance
+	Q.resize(n); // allocate space in vector Q in advance
 	for (int i = 0; i < n; i++) { // copy elements in A to this->Q
 		Q[i] = A[i];
 	}
@@ -129,7 +129,7 @@ Post-conditions: a string representation of the min queue Q
 	stringstream ss;
 	for (int i = 0; i < Q.size(); i++)
 	{
-		if (i == Q.size() - 1)
+		if (i == Q.size() - 1) // prevent adding " " after the last element
 		{
 			ss << Q[i];
 		}
@@ -160,6 +160,8 @@ Post-conditions: read min value of type T, Q is still intact
 	if (Q.size() > 0)
 	{
 		return Q[0];
+	} else {
+		// throw "Out-of-range index"; // could throw an exception here when it's out of range!
 	}
 }
 
@@ -178,21 +180,23 @@ Post-conditions: remove and return min value of type T, and Q is 1 less smaller 
 		heapSize -= 1; // decrease heapSize
 		heapify_down(0); // fix the problematic element at root
 		return min;
+	} else {
+		// throw "Out-of-range index"; // could throw an exception here when it's out of range!
 	}
 }
 
 template <typename T>
 void MinQueue<T>::decrease_key(int i, T key)
 /*
-Pre-conditions: i must be of type int and key must be of type T
-Post-conditions: new key is at a place where heap property is still kept
+Pre-conditions: param i must be of type int and param key must be of type T
+Post-conditions: new key is at a place where heap property is still maintained
 */
 {
 	if (i < Q.size()) { // prevent out-of-range error
 		Q[i] = key;
-		while (Q[i] < Q[parent(i)]) // keep swapping this problematic node at i upwards until heap property is restored
+		while (Q[i] < Q[parent(i)]) 
 		{
-			swap(Q[i], Q[parent(i)]);
+			swap(Q[i], Q[parent(i)]); // keep swapping this problematic node at i upwards until heap property is restored
 			i = parent(i);
 		}
 	}
@@ -201,11 +205,11 @@ Post-conditions: new key is at a place where heap property is still kept
 template <typename T>
 void MinQueue<T>::insert(T key)
 /*
-Pre-conditions: key must be of type T
+Pre-conditions: param key must be of type T
 Post-conditions: new key is at a place where heap property holds true and queue is 1 more bigger in size
 */
 {
 	Q.push_back(key); // add key to the end of Q
 	heapSize += 1; // increase size
-	decrease_key(heapSize-1, key); // apply decrease_key() to this key
+	decrease_key(heapSize-1, key); // apply decrease_key() to this key to maintain heap property
 }
